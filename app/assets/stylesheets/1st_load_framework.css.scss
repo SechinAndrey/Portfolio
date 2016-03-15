@@ -2,15 +2,15 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
 
-// make all images responsive by default
+ //make all images responsive by default
 img {
   @extend .img-responsive;
   margin: 0 auto;
   }
 // override for the 'Home' navigation link
-.navbar-brand {
-  font-size: inherit;
-  }
+//.navbar-brand {
+//  font-size: inherit;
+//  }
 
 // THESE ARE EXAMPLES YOU CAN MODIFY
 // create your own classes
@@ -38,7 +38,7 @@ main {
   background-color: #eee;
   padding: 0px;
   width: 100%;
-  margin-top: 51px; // accommodate the navbar
+  //margin-top: 51px; // accommodate the navbar
   }
 section {
   @extend .row;

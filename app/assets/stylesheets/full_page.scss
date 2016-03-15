@@ -4,7 +4,15 @@
 h1 {
   font-size: 5em;
   font-family: arial,helvetica;
-  color: #fff;
+  color: #262626;
+  margin: 0;
+  padding: 0;
+}
+
+p{
+  font-size: 2em;
+  font-family: arial,helvetica;
+  color: #313131;
   margin: 0;
   padding: 0;
 }
@@ -15,23 +23,36 @@ h1 {
 
 #section1,
 #section2,
-#section3,
-#section4 {
+#section3{
   background-size: cover;
 }
 
 #section1 {
-  background-image: image-url("bg1.jpg");
+  background-color: #FDF3E7;
+}
+
+#photo{
+  margin-top: -10%;
+}
+
+#photo > img{
+  width: 15%;
+}
+
+#greeting{
+  margin-top: 50px;
+  width: 75%;
+  display: inline-block;
 }
 
 #section2 {
-  background-image: image-url("bg2.jpg");
+  background-color: #8FFF8D;
 }
 
 #section3 {
-  background-image: image-url("bg3.jpg");
+
 }
 
-#section4 {
-  background-image: image-url("bg4.jpg");
-}
+//#section4 {
+//  background-image: image-url("bg4.jpg");
+//}
