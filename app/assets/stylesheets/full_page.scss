@@ -2,7 +2,7 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 h1 {
-  font-size: 5em;
+  font-size: 5vw;
   font-family: arial,helvetica;
   color: #262626;
   margin: 0;
@@ -10,7 +10,7 @@ h1 {
 }
 
 p{
-  font-size: 2em;
+  font-size: 3vmin;
   font-family: arial,helvetica;
   color: #313131;
   margin: 0;
@@ -28,7 +28,7 @@ p{
 }
 
 #section1 {
-  background-color: #FDF3E7;
+  background-color: #78a797;
 }
 
 #photo{
@@ -41,12 +41,15 @@ p{
 
 #greeting{
   margin-top: 50px;
-  width: 75%;
+  width: 80%;
   display: inline-block;
+  p{
+    margin-top: 2%;
+  }
 }
 
 #section2 {
-  background-color: #8FFF8D;
+  background-color: #62bb6d;
 }
 
 #section3 {
