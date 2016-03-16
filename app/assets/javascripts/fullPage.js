@@ -9,6 +9,7 @@ $(document).ready(function() {
         navigationPosition: 'right',
         navigationTooltips:['firstPageTooltip', 'secondPageTooltip', 'thirdPageTooltip', 'fourthPageTooltip'],
         css3: true,
+        normalScrollElements: '#map'
     });
 });
 
