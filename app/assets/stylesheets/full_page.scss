@@ -58,6 +58,16 @@ p{
   background-color: #fffdf8;
   display: inline-block;
 }
+
+@media screen and (max-width: 650px) {
+  #map{
+    width: 90vw;
+    height: 90vh;
+    background-color: #fffdf8;
+    display: inline-block;
+  }
+}
+
 #section3 {
 
 }
