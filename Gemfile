@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+gem 'shmatgem'
+
 gem 'bootstrap-sass'
 gem 'rails_layout'
 gem 'jquery-rails'
@@ -7,6 +9,11 @@ gem 'jquery-ui-rails'
 gem 'haml'
 gem 'haml-rails'
 gem 'figaro'
+
+gem 'devise'
+gem 'omniauth'
+gem 'omniauth-facebook'
+gem 'omniauth-google-oauth2'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.6'
