@@ -1,12 +1,9 @@
 #photo
   = link_to 'English', :locale=>'en'
   = link_to 'Русский', :locale=>'ru'
-  =image_tag 'pfoto.png'
+  = image_tag 'pfoto.png'
 #greeting
   %h1
     ="#{t 'hello'}"
   %p
     ="#{t 'p_greeting'}"
-= current_user.inspect
-= link_to "Logout", destroy_user_session_path, method: :delete
-= link_to "Login", new_user_session_path

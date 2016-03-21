@@ -1,0 +1,8 @@
+- if object.errors.any?
+  #error_explanation
+    .alert.alert-danger
+      #{t 'shared.the_form_contains', :count => object.errors.count} #{t 'shared.error', :count => object.errors.count}.
+    %ul
+      - object.errors.full_messages.each do |msg|
+        %li
+          * #{msg}
