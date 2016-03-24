@@ -12,9 +12,9 @@
           .panel-heading
             .row
               .col-xs-6
-                %a#login-form-link.active{:href => "#"} Login
+                %a#login-form-link.active{:href => "#"} #{t 'login'}
               .col-xs-6
-                %a#register-form-link{:href => "#"} Register
+                %a#register-form-link{:href => "#"} #{t 'register'}
             %hr/
           .panel-body
             .row
@@ -26,7 +26,7 @@
                   .form-group
                     = f.email_field :email, :placeholder => "Email", class: 'form-control'
                   .form-group
-                    = f.password_field :password, autocomplete: 'off',:placeholder => "Password (8 characters minimum)", class: 'form-control'
+                    = f.password_field :password, autocomplete: 'off',:placeholder => "#{t 'pass'}", class: 'form-control'
                   - if devise_mapping.rememberable?
                     .form-group.text-center
                       = f.check_box :remember_me
