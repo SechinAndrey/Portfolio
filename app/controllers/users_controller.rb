@@ -5,6 +5,10 @@ class UsersController < ApplicationController
       ########
   #####       ######
 
+  # def new
+  #   @user = User.new
+  # end
+
   # GET /users/:id.:format
   def show
     # authorize! :read, @user

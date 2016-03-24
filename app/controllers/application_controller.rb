@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  # respond_to :html, :json, :js
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   before_filter :ensure_signup_complete, only: [:new, :create, :update, :destroy]

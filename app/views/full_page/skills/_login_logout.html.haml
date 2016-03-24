@@ -1,5 +1,47 @@
 %p
-  #login_out
-    = current_user.inspect if user_signed_in?
-    = link_to "Logout", destroy_user_session_path, method: :delete, remote: true if user_signed_in?
-    = link_to "Login", new_user_session_path unless user_signed_in?
+  - if user_signed_in?
+    #login_out
+      = "#{t 'enter_email'}"
+      = current_user.email
+      = link_to "#{t 'logout'}", destroy_user_session_path, method: :delete, remote: true
+-if current_user.nil?
+  .container
+    .row
+      .col-md-6.col-md-offset-3
+        .panel.panel-login
+          .panel-heading
+            .row
+              .col-xs-6
+                %a#login-form-link.active{:href => "#"} Login
+              .col-xs-6
+                %a#register-form-link{:href => "#"} Register
+            %hr/
+          .panel-body
+            .row
+              .col-lg-12
+                - if devise_mapping.omniauthable?
+                  - resource_class.omniauth_providers.each do |provider|
+                    = link_to "| #{provider.to_s.titleize} |", omniauth_authorize_path(resource_name, provider)
+                = form_for(User.new, as: resource_name, url: session_path(resource_name), remote: true, :html => { :id => "login-form", :style => "display: block;" }) do |f|
+                  .form-group
+                    = f.email_field :email, :placeholder => "Email", class: 'form-control'
+                  .form-group
+                    = f.password_field :password, autocomplete: 'off',:placeholder => "Password (8 characters minimum)", class: 'form-control'
+                  - if devise_mapping.rememberable?
+                    .form-group.text-center
+                      = f.check_box :remember_me
+                      = f.label :remember_me
+                  .form-group
+                    .row
+                      .col-sm-6.col-sm-offset-3
+                        = f.submit 'Log in', :class => 'form-control btn btn-login', :id => 'login-submit'
+                = form_for(User.new, as: resource_name, url: registration_path(resource_name), remote: true, :html => { :id => 'register-form', :style => "display: none;"}) do |f|
+                  .form-group
+                    = f.email_field :email, autofocus: true, :placeholder => "Email", class: 'form-control'
+                  .form-group
+                    = f.password_field :password, autocomplete: 'off',:placeholder => "Password (8 characters minimum)", class: 'form-control'
+                  .form-group
+                    = f.password_field :password_confirmation, autocomplete: 'off', :placeholder => "Password confirmation", class: 'form-control'
+                  .actions
+                    = f.submit 'Sign up', class: 'btn btn-default'
+-#= link_to "Login", new_user_session_path unless user_signed_in?
