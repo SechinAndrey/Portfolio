@@ -265,9 +265,7 @@ Devise.setup do |config|
 
   config.omniauth :facebook, '804499573027140', 'afaab0e2cbb85fd9b21383cc1a2ebe48'
   config.omniauth :google_oauth2, '388008365638-id4fiuf0518qi3np6kdld00cf906u8qd.apps.googleusercontent.com', 'mNGBdDmy8QL-Mb0rsOKgWkRk', {
-      :scope => 'email,profile',
-      :access_type => 'online',
-      :prompt => ''
+      :scope => 'email,profile'
   }
   # config.omniauth :google_oauth2, "GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", { }
 end
