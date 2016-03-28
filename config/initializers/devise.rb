@@ -264,6 +264,6 @@ Devise.setup do |config|
   # config.omniauth_path_prefix = '/my_engine/users/auth'
 
   config.omniauth :facebook, '804499573027140', 'afaab0e2cbb85fd9b21383cc1a2ebe48'
-  config.omniauth :google_oauth2, '388008365638-id4fiuf0518qi3np6kdld00cf906u8qd.apps.googleusercontent.com', 'mNGBdDmy8QL-Mb0rsOKgWkRk', { scope: 'userinfo.email,userinfo.profile,https://www.google.com/m8/feeds', access_type: 'offline', approval_prompt: '', client_options: {:ssl => {:ca_file => '/usr/lib/ssl/certs/ca-certificates.crt'}} }
+  config.omniauth :google_oauth2, '388008365638-id4fiuf0518qi3np6kdld00cf906u8qd.apps.googleusercontent.com', 'mNGBdDmy8QL-Mb0rsOKgWkRk', {access_type: 'offline', approval_prompt: '', client_options: {:ssl => {:ca_file => '/usr/lib/ssl/certs/ca-certificates.crt'}} }
   # config.omniauth :google_oauth2, "GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", { }
 end
