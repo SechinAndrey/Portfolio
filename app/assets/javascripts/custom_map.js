@@ -2,55 +2,37 @@ var myLatLng = {lat: 47.860803, lng: 35.0992256};
 var map;
 var origin_marker;
 var destination_marker;
+var distance;
 
 function initMap() {
     var directionsService = new google.maps.DirectionsService;
     var directionsDisplay = new google.maps.DirectionsRenderer;
+
+    var point_to_add;
+    var timeZoneA, timeZoneB;
+
 
     map = new google.maps.Map($('#map')[0], {
         center: myLatLng,
         zoom: 10
     });
 
-	var styles = [
-  {
-    stylers: [
-      { hue: "#00ffe6" },
-      { saturation: -20 }
-    ]
-  },{
-    featureType: "road",
-    elementType: "geometry",
-    stylers: [
-      { lightness: 100 },
-      { visibility: "simplified" }
-    ]
-  },{
-    featureType: "road",
-    elementType: "labels",
-    stylers: [
-      { visibility: "off" }
-    ]
-  }
-];
-
-map.setOptions({styles: styles});
-
     directionsDisplay.setMap(map);
 
-    var service = new google.maps.DistanceMatrixService();
+    var distanceService = new google.maps.DistanceMatrixService();
 
-
-    //my_marker =  new google.maps.Marker({
-    //    position: myLatLng,
-    //    map: map
-    //});
+    $("#origin").click(function() {
+        point_to_add = 'A';
+    });
+    $("#destination").click(function() {
+        point_to_add = 'B';
+    });
 
     google.maps.event.addListener(map, 'click', function(event) {
-        if ($("#origin").is(":focus")) {
+        if (point_to_add == 'A') {
             origin_marker = placeMarker(origin_marker, event.latLng, 'A');
             $("#origin").val(event.latLng)
-        }else if($("#destination").is(":focus")){
+        }else if(point_to_add == 'B'){
             destination_marker = placeMarker(destination_marker, event.latLng, 'B');
             $("#destination").val(event.latLng)
         }
@@ -58,31 +40,49 @@ map.setOptions({styles: styles});
 
     $('#get_directions').click(function() {
         calculateAndDisplayRoute(directionsService, directionsDisplay);
-        calculateDistance(service);
-
-        //console.log(origin_marker.getPosition().lat());
-
-        $.ajax({
-            url:"https://maps.googleapis.com/maps/api/timezone/json?location="+origin_marker.getPosition().lat()+","+origin_marker.getPosition().lng()+"&timestamp="+(Math.round((new Date().getTime())/1000)).toString()+"&sensor=false"
-        }).done(function(response){
-            if(response.timeZoneId != null){
-               console.log(response.timeZoneId);
-            }
-        });
+        calculateDistance(distanceService);
+        timeZoneA = getTimeZone(origin_marker);
+        timeZoneB = getTimeZone(destination_marker);
     });
+
     //var directionsDisplay = new google.maps.DirectionsRenderer({
     //    map: map
     //});
-    
+
+    //STYLE
+
+    var styles = [
+        {
+            stylers: [
+                { hue: "#00ffe6" },
+                { saturation: -20 }
+            ]
+        },{
+            featureType: "road",
+            elementType: "geometry",
+            stylers: [
+                { lightness: 100 },
+                { visibility: "simplified" }
+            ]
+        },{
+            featureType: "road",
+            elementType: "labels",
+            stylers: [
+                { visibility: "off" }
+            ]
+        }
+    ];
+    map.setOptions({styles: styles});
 }
 
 function callback(response, status) {
-
 
     if (status == "OK") {
         console.log(response.destinationAddresses[0]);
         console.log(response.originAddresses[0]);
         console.log(response.rows[0].elements[0].distance.text);
+        distance = response.rows[0].elements[0].distance.text;
+        $('#distance_info').html('distance: ' + distance);
     } else {
         alert("Error: " + status);
     }
@@ -108,7 +108,7 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay) {
     directionsService.route({
         origin: origin_marker.position,
         destination: destination_marker.position,
-        travelMode: google.maps.TravelMode.WALKING
+        travelMode: google.maps.TravelMode.DRIVING
     }, function(response, status) {
         if (status === google.maps.DirectionsStatus.OK) {
             directionsDisplay.setDirections(response);
@@ -130,3 +130,14 @@ function calculateDistance(service){
             avoidTolls: false
         }, callback);
 }
+
+function getTimeZone(marker){
+    $.ajax({
+        url:"https://maps.googleapis.com/maps/api/timezone/json?location="+marker.getPosition().lat()+","+marker.getPosition().lng()+"&timestamp="+(Math.round((new Date().getTime())/1000)).toString()+"&sensor=false"
+    }).done(function(response){
+        //if(response.timeZoneId != null){
+            return response.timeZoneId;
+        //}
+    });
+}
+

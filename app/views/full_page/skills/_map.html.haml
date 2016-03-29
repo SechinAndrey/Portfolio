@@ -1,7 +1,14 @@
 %p
   ="#{t 'p_location'}"
-  #map
-#way_form
-  = text_field_tag(:origin, nil, placeholder: 'origin')
-  = text_field_tag(:destination, nil, placeholder: 'destination')
-  = submit_tag "Get directions", id: 'get_directions'
+.row
+  .col-md-2
+  .col-md-4
+    #map
+  .col-md-3
+    #way_form
+      = text_field_tag(:origin, nil, placeholder: 'origin')
+      = text_field_tag(:destination, nil, placeholder: 'destination')
+      = submit_tag "Get directions", id: 'get_directions'
+      #distance_info
+      #origin_info
+      #destination
