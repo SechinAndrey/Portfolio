@@ -41,16 +41,16 @@ function initMap() {
     $('#get_directions').click(function() {
         calculateAndDisplayRoute(directionsService, directionsDisplay);
         calculateDistance(distanceService);
-        timeZoneA = getTimeZone(origin_marker);
-        timeZoneB = getTimeZone(destination_marker);
+        getTimeZone(origin_marker);
+        getTimeZone(destination_marker);
+
+        //$("#time_origin").html(timeZoneA);
+        //$("#time_destination").html(timeZoneB);
+
+
     });
 
-    //var directionsDisplay = new google.maps.DirectionsRenderer({
-    //    map: map
-    //});
-
     //STYLE
-
     var styles = [
         {
             stylers: [
@@ -104,7 +104,6 @@ function placeMarker(marker, location, lable) {
 }
 
 function calculateAndDisplayRoute(directionsService, directionsDisplay) {
-    console.log($("#origin").val());
     directionsService.route({
         origin: origin_marker.position,
         destination: destination_marker.position,
@@ -135,9 +134,12 @@ function getTimeZone(marker){
     $.ajax({
         url:"https://maps.googleapis.com/maps/api/timezone/json?location="+marker.getPosition().lat()+","+marker.getPosition().lng()+"&timestamp="+(Math.round((new Date().getTime())/1000)).toString()+"&sensor=false"
     }).done(function(response){
-        //if(response.timeZoneId != null){
-            return response.timeZoneId;
-        //}
+        console.log(response);
+        if(marker.label == 'A'){
+            $("#time_origin").html(response.timeZoneId);
+        }else{
+            $("#time_destination").html(response.timeZoneId);
+        }
     });
 }
 
