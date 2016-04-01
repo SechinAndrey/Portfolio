@@ -21,11 +21,12 @@ function initMap() {
 
     var distanceService = new google.maps.DistanceMatrixService();
 
-    $("#origin").click(function() {
-        point_to_add = 'A';
-    });
-    $("#destination").click(function() {
-        point_to_add = 'B';
+    $(".point").click(function() {
+        if($(this).find("#a").length == 1){
+            point_to_add = 'A';
+        }else{
+            point_to_add = 'B';
+        }
     });
 
     google.maps.event.addListener(map, 'click', function(event) {
@@ -46,7 +47,6 @@ function initMap() {
 
         //$("#time_origin").html(timeZoneA);
         //$("#time_destination").html(timeZoneB);
-
 
     });
 
@@ -78,11 +78,12 @@ function initMap() {
 function callback(response, status) {
 
     if (status == "OK") {
-        console.log(response.destinationAddresses[0]);
-        console.log(response.originAddresses[0]);
-        console.log(response.rows[0].elements[0].distance.text);
+        //console.log(response.destinationAddresses[0]);
+        //console.log(response.originAddresses[0]);
+        //console.log(response.rows[0].elements[0].distance.text);
         distance = response.rows[0].elements[0].distance.text;
-        $('#distance_info').html('distance: ' + distance);
+        $('#distance').text('distance: ' + distance);
+        $('#distance_container').css('height','auto');
     } else {
         alert("Error: " + status);
     }
@@ -134,12 +135,60 @@ function getTimeZone(marker){
     $.ajax({
         url:"https://maps.googleapis.com/maps/api/timezone/json?location="+marker.getPosition().lat()+","+marker.getPosition().lng()+"&timestamp="+(Math.round((new Date().getTime())/1000)).toString()+"&sensor=false"
     }).done(function(response){
-        console.log(response);
         if(marker.label == 'A'){
-            $("#time_origin").html(response.timeZoneId);
+            $("#a > .time").html(calcTime(response.dstOffset + response.rawOffset));
         }else{
-            $("#time_destination").html(response.timeZoneId);
+            $("#b > .time").html(calcTime(response.dstOffset + response.rawOffset));
         }
     });
 }
 
+function calcTime(offset) {
+    var d = new Date();
+    var utc = d.getTime() + (d.getTimezoneOffset() * 60000);var nd = new Date(utc + (1000*offset));
+    return nd.toLocaleString();
+}
+
+function getCity(latlng) {
+    new google.maps.Geocoder().geocode({'latLng' : latlng}, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+            if (results[1]) {
+                var country = null, countryCode = null, city = null, cityAlt = null;
+                var c, lc, component;
+                for (var r = 0, rl = results.length; r < rl; r += 1) {
+                    var result = results[r];
+
+                    if (!city && result.types[0] === 'locality') {
+                        for (c = 0, lc = result.address_components.length; c < lc; c += 1) {
+                            component = result.address_components[c];
+
+                            if (component.types[0] === 'locality') {
+                                city = component.long_name;
+                                break;
+                            }
+                        }
+                    }
+                    else if (!city && !cityAlt && result.types[0] === 'administrative_area_level_1') {
+                        for (c = 0, lc = result.address_components.length; c < lc; c += 1) {
+                            component = result.address_components[c];
+
+                            if (component.types[0] === 'administrative_area_level_1') {
+                                cityAlt = component.long_name;
+                                break;
+                            }
+                        }
+                    } else if (!country && result.types[0] === 'country') {
+                        country = result.address_components[0].long_name;
+                        countryCode = result.address_components[0].short_name;
+                    }
+
+                    if (city && country) {
+                        break;
+                    }
+                }
+
+                console.log("City: " + city + ", City2: " + cityAlt + ", Country: " + country + ", Country Code: " + countryCode);
+            }
+        }
+    });
+}

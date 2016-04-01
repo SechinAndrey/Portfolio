@@ -1,18 +1,37 @@
-%p
-  ="#{t 'p_location'}"
 .row
   .col-md-2
   .col-md-4
     #map
-  .col-md-3
+  .col-md-3{ :style => "padding: 0px;" }
     #way_form
-      = label_tag(:origin, "", id: 'time_origin')
-      = text_field_tag(:origin, nil, placeholder: 'origin')
-      %br
-      = label_tag(:destination, "", id: 'time_destination')
-      = text_field_tag(:destination, nil, placeholder: 'destination')
-      %br
-      = submit_tag "Get directions", id: 'get_directions'
-      #distance_info
-      #origin_info
-      #destination
+      .row
+        .col-md-6{ :style => "padding: 3px;" }
+          .point
+            #a
+              %h4
+                point A
+              %hr
+              .time
+              .coordinates
+                Click here then map
+            -#= label_tag(:origin, "", id: 'time_origin')
+            -#= text_field_tag(:origin, nil, placeholder: 'origin')
+        .col-md-6{ :style => "padding: 3px;" }
+          .point
+            #b
+              %h4
+                point B
+              %hr
+              .time
+
+              .coordinates
+                Click here then map
+            -#= label_tag(:destination, "", id: 'time_destination')
+            -#= text_field_tag(:destination, nil, placeholder: 'destination')
+      .row
+        #distance_container
+          #distance
+          .el1
+          .el2
+        %br
+          = submit_tag 'Get directions', id: 'get_directions', class: 'btn btn-default'
