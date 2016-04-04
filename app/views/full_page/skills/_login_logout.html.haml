@@ -7,7 +7,7 @@
 -if current_user.nil?
   .container
     .row
-      .col-md-6.col-md-offset-3
+      .col-md-4
         .panel.panel-login
           .panel-heading
             .row
@@ -33,7 +33,7 @@
                       = f.label :remember_me
                   .form-group
                     .row
-                      .col-sm-6.col-sm-offset-3
+                      .col-sm-12
                         = f.submit 'Log in', :class => 'form-control btn btn-login', :id => 'login-submit'
                 = form_for(User.new, as: resource_name, url: registration_path(resource_name), remote: true, :html => { :id => 'register-form', :style => "display: none;"}) do |f|
                   .form-group
@@ -42,6 +42,10 @@
                     = f.password_field :password, autocomplete: 'off',:placeholder => "Password (8 characters minimum)", class: 'form-control'
                   .form-group
                     = f.password_field :password_confirmation, autocomplete: 'off', :placeholder => "Password confirmation", class: 'form-control'
-                  .actions
-                    = f.submit 'Sign up', class: 'btn btn-default'
+                  .form-group
+                    .row
+                      .col-sm-12
+                        = f.submit 'Sign up', class: 'form-control btn btn-login'
+      .col-md-3.col-md-offset-1
+        -#= render
 -#= link_to "Login", new_user_session_path unless user_signed_in?
