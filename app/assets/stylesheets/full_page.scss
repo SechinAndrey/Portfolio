@@ -62,15 +62,17 @@ p{
 }
 
 .point{
-  background-color: rgb(52, 152, 219);
+//rgb(171, 210, 219)
+//  background-color: rgb(52, 152, 219);
+  background-color: rgb(23, 143, 219);
   color: white;
   border-radius: 10px;
   word-wrap: break-word;
   height: 100px;
 
   &:hover{
-    background-color: white;
-    color: rgb(52, 152, 219);
+    background-color: white !important;
+    color: rgb(52, 152, 219) !important;
   }
 
   h4{

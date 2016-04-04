@@ -4,12 +4,29 @@ var origin_marker;
 var destination_marker;
 var distance;
 
+var point_a_time_text = '', point_b_time_text = '';
+var point_a_city_text = 'Click here then map', point_b_city_text = 'Click here then map';
+
+var interval;
+var a_checked = false; b_checked = false;
+
+
+function sec(){
+    if (origin_marker != undefined && a_checked){
+        getTimeZone(origin_marker);
+    }
+    if(destination_marker != undefined && b_checked){
+        getTimeZone(destination_marker);
+    }
+}
+
 function initMap() {
     var directionsService = new google.maps.DirectionsService;
     var directionsDisplay = new google.maps.DirectionsRenderer;
 
     var point_to_add;
-    var timeZoneA, timeZoneB;
+
+    //var timeZoneA, timeZoneB;
 
 
     map = new google.maps.Map($('#map')[0], {
@@ -21,29 +38,73 @@ function initMap() {
 
     var distanceService = new google.maps.DistanceMatrixService();
 
-    $(".point").click(function() {
+    $('html').click(function(event) {
+        if(point_to_add == 'A'){
+            $('#a .time').text(point_a_time_text);
+            $('#a .city').text(point_a_city_text);
+            $(".point").css('border','none');
+        }else{
+            $('#b .time').text(point_b_time_text);
+            $('#b .city').text(point_b_city_text);
+            $(".point").css('border','none');
+        }
+    });
+
+    //$('#menucontainer').click(function(event){
+    //    event.stopPropagation();
+    //});
+
+    $(".point").click(function(event) {
+        event.stopPropagation();
+        $(".point").css('border','none');
+        $(this).css('border','solid 2px white');
         if($(this).find("#a").length == 1){
             point_to_add = 'A';
+            $(this).find('.time').text('');
+            $(this).find('.city').text('click on the map to choose origin');
+            $('#b .time').text(point_b_time_text);
+            $('#b .city').text(point_b_city_text);
         }else{
             point_to_add = 'B';
+            $(this).find('.time').text('');
+            $(this).find('.city').text('click on the map to choose origin');
+            $('#a .time').text(point_a_time_text);
+            $('#a .city').text(point_a_city_text);
         }
     });
 
     google.maps.event.addListener(map, 'click', function(event) {
         if (point_to_add == 'A') {
             origin_marker = placeMarker(origin_marker, event.latLng, 'A');
-            $("#origin").val(event.latLng)
+            $("#origin").val(event.latLng);
+            getTimeZone(origin_marker);
+            if(destination_marker != undefined){
+                getTimeZone(destination_marker);
+            }
+            //if (interval == undefined){
+            //    interval = setInterval("sec()", 1000)
+            //}
+
+            getCity(origin_marker);
+            $('#distance_container').css('height','0');
         }else if(point_to_add == 'B'){
             destination_marker = placeMarker(destination_marker, event.latLng, 'B');
-            $("#destination").val(event.latLng)
+            $("#destination").val(event.latLng);
+            getTimeZone(destination_marker);
+            if(origin_marker != undefined){
+                getTimeZone(origin_marker);
+            }
+            //if (interval == undefined){
+            //    interval =setInterval("sec()", 1000)
+            //}
+            getCity(destination_marker);
+            $('#distance_container').css('height','0');
         }
     });
 
-    $('#get_directions').click(function() {
+    $('#get_directions').click(function(event) {
         calculateAndDisplayRoute(directionsService, directionsDisplay);
         calculateDistance(distanceService);
-        getTimeZone(origin_marker);
-        getTimeZone(destination_marker);
 
         //$("#time_origin").html(timeZoneA);
         //$("#time_destination").html(timeZoneB);
@@ -136,9 +197,11 @@ function getTimeZone(marker){
         url:"https://maps.googleapis.com/maps/api/timezone/json?location="+marker.getPosition().lat()+","+marker.getPosition().lng()+"&timestamp="+(Math.round((new Date().getTime())/1000)).toString()+"&sensor=false"
     }).done(function(response){
         if(marker.label == 'A'){
-            $("#a > .time").html(calcTime(response.dstOffset + response.rawOffset));
+            point_a_time_text = calcTime(response.dstOffset + response.rawOffset);
+            $("#a > .time").html(point_a_time_text);
         }else{
-            $("#b > .time").html(calcTime(response.dstOffset + response.rawOffset));
+            point_b_time_text = calcTime(response.dstOffset + response.rawOffset);
+            $("#b > .time").html(point_b_time_text);
         }
     });
 }
@@ -149,11 +212,13 @@ function calcTime(offset) {
     return nd.toLocaleString();
 }
 
-function getCity(latlng) {
+function getCity(marker) {
+    latlng = new google.maps.LatLng(marker.getPosition().lat(), marker.getPosition().lng());
     new google.maps.Geocoder().geocode({'latLng' : latlng}, function(results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
             if (results[1]) {
-                var country = null, countryCode = null, city = null, cityAlt = null;
+                var country = null, countryCode = null, city = null, cityAlt = null, city_str = '';
+
                 var c, lc, component;
                 for (var r = 0, rl = results.length; r < rl; r += 1) {
                     var result = results[r];
@@ -164,6 +229,7 @@ function getCity(latlng) {
 
                             if (component.types[0] === 'locality') {
                                 city = component.long_name;
+                                city_str += " City: " + city + ";";
                                 break;
                             }
                         }
@@ -174,17 +240,28 @@ function getCity(latlng) {
 
                             if (component.types[0] === 'administrative_area_level_1') {
                                 cityAlt = component.long_name;
+                                city_str += " City2: " + cityAlt + ";";
                                 break;
                             }
                         }
                     } else if (!country && result.types[0] === 'country') {
                         country = result.address_components[0].long_name;
                         countryCode = result.address_components[0].short_name;
+
+                        city_str += " Country Code: " + countryCode + ";";
                     }
 
                     if (city && country) {
                         break;
                     }
+                }
+
+                if(marker.label == 'A'){
+                    point_a_city_text = city_str;
+                    $("#a > .city").html(city_str);
+                }else{
+                    point_b_city_text = city_str;
+                    $("#b > .city").html(city_str);
                 }
 
                 console.log("City: " + city + ", City2: " + cityAlt + ", Country: " + country + ", Country Code: " + countryCode);
