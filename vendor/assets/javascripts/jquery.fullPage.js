@@ -449,7 +449,7 @@
         };
 
         /**
-        * Turns fullPage.js to normal scrolling mode when the viewport `width` or `height`
+        * Turns fullPage.coffee to normal scrolling mode when the viewport `width` or `height`
         * are smaller than the set limit values.
         */
         FP.setResponsive = function (active){
